@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="kart">
+  <div class="filtre-bar">
+    <form method="GET" style="display:flex;flex-wrap:wrap;gap:8px;width:100%">
+      <select name="muk" onchange="this.form.submit()">
+        <option value="">Tüm Mükellefler</option>
+        {% for m in mukellefler %}<option value="{{ m }}" {{ 'selected' if muk_f==m }}>{{ m }}</option>{% endfor %}
+      </select>
+      <select name="tur" onchange="this.form.submit()">
+        <option value="">Tüm Türler</option>
+        {% for t in turler %}<option value="{{ t }}" {{ 'selected' if tur_f==t }}>{{ t }}</option>{% endfor %}
+      </select>
+      <select name="ay" onchange="this.form.submit()">
+        <option value="">Tüm Aylar</option>
+        {% for a in aylar %}<option value="{{ a }}" {{ 'selected' if ay_f==a }}>{{ a }}</option>{% endfor %}
+      </select>
+      <select name="dur" onchange="this.form.submit()">
+        <option value="">Tüm Durumlar</option>
+        <option value="Bekliyor" {{ 'selected' if dur_f=='Bekliyor' }}>Bekliyor</option>
+        <option value="Verildi" {{ 'selected' if dur_f=='Verildi' }}>Verildi</option>
+        <option value="Gecikmiş" {{ 'selected' if dur_f=='Gecikmiş' }}>Gecikmiş</option>
+      </select>
+    </form>
+  </div>
+  <div style="padding:10px 16px;border-bottom:1px solid #E2E8F0;display:flex;align-items:center;gap:12px">
+    <label style="font-size:13px;display:flex;align-items:center;gap:6px">
+      <input type="checkbox" onchange="tumunuSec(this)"> Tümünü seç
+    </label>
+    <span style="font-size:13px;color:#64748B"><span id="secili-sayi">0</span> seçili</span>
+    <button class="btn btn-grn btn-sml" onclick="verildiIsaretle(secili)">✓ Verildi İşaretle</button>
+  </div>
+  <table class="tablo">
+    <tr>
+      <th></th>
+      <th>Mükellef</th>
+      <th>Beyanname</th>
+      <th>Dönem</th>
+      <th>Son Tarih</th>
+      <th>Verilme</th>
+      <th>Durum</th>
+    </tr>
+    {% for b in beyanlar %}
+    <tr>
+      <td><input type="checkbox" class="chk-beyan" data-id="{{ b.id }}" onchange="toggleSec('{{ b.id }}',this)"></td>
+      <td><strong>{{ b.mukellef_ad }}</strong></td>
+      <td>{{ b.tur }}</td>
+      <td>{{ b.donem }}</td>
+      <td {% if b.durum_goster=='Gecikmiş' %}style="color:#DC2626;font-weight:500"{% endif %}>{{ b.son_tarih }}</td>
+      <td>{{ b.verilme_tarihi or '—' }}</td>
+      <td>
+        {% if b.durum_goster=='Verildi' %}<span class="badge verildi">✓ Verildi</span>
+        {% elif b.durum_goster=='Gecikmiş' %}<span class="badge gecikmiş">✗ Gecikmiş</span>
+        {% else %}<span class="badge bekliyor">⏳ Bekliyor</span>{% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  <div style="padding:10px 16px;background:#F8FAFC;font-size:13px;color:#64748B;border-top:1px solid #E2E8F0">
+    {{ beyanlar|length }} kayıt
+  </div>
+</div>
+{% endblock %}

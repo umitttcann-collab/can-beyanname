@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="kart">
+  <div class="kart-hdr"><h2>Mükellefler ({{ mukellefler|length }})</h2></div>
+  <table class="tablo">
+    <tr><th>Mükellef</th><th>Vergi No</th><th>Beyanname Sayısı</th><th>Durum</th></tr>
+    {% for m in mukellefler %}
+    <tr>
+      <td><strong>{{ m.ad }}</strong></td>
+      <td style="color:#64748B">{{ m.vergi_no or '—' }}</td>
+      <td><span style="color:#1B2B4B;font-weight:600">{{ m.beyan_sayisi }}</span></td>
+      <td>{% if m.kapanis %}<span class="badge" style="background:#F1F5F9;color:#64748B">Kapalı</span>
+          {% else %}<span class="badge verildi">Aktif</span>{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

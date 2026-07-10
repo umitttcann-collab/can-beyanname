@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="stat-grid">
+  <div class="stat-kart"><div class="lbl">Toplam</div><div class="val" style="color:#1B2B4B">{{ stats.toplam }}</div></div>
+  <div class="stat-kart"><div class="lbl">Verildi ✓</div><div class="val" style="color:#16A34A">{{ stats.verildi }}</div></div>
+  <div class="stat-kart"><div class="lbl">Bekliyor</div><div class="val" style="color:#D97706">{{ stats.bekliyor }}</div></div>
+  <div class="stat-kart"><div class="lbl">Gecikmiş ✗</div><div class="val" style="color:#DC2626">{{ stats.gecikmiş }}</div></div>
+</div>
+
+{% if gecikmiş %}
+<div class="kart">
+  <div class="kart-hdr"><h2 style="color:#DC2626">✗ Gecikmiş ({{ gecikmiş|length }})</h2></div>
+  <table class="tablo">
+    <tr><th>Mükellef</th><th>Beyanname</th><th>Son Tarih</th><th>Durum</th></tr>
+    {% for b in gecikmiş %}
+    <tr>
+      <td><strong>{{ b.mukellef_ad }}</strong></td>
+      <td>{{ b.tur }}</td>
+      <td style="color:#DC2626">{{ b.son_tarih }}</td>
+      <td><span class="badge gecikmiş">✗ Gecikmiş</span></td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+
+{% if bu_ay %}
+<div class="kart">
+  <div class="kart-hdr"><h2 style="color:#D97706">⏳ Bu Ay Son Tarihliler ({{ bu_ay|length }})</h2></div>
+  <table class="tablo">
+    <tr><th>Mükellef</th><th>Beyanname</th><th>Son Tarih</th><th>Dönem</th></tr>
+    {% for b in bu_ay %}
+    <tr>
+      <td><strong>{{ b.mukellef_ad }}</strong></td>
+      <td>{{ b.tur }}</td>
+      <td>{{ b.son_tarih }}</td>
+      <td>{{ b.donem }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+
+{% if not gecikmiş and not bu_ay %}
+<div class="kart" style="padding:32px;text-align:center;color:#64748B">
+  <p style="font-size:16px">✓ Tüm beyannameler güncel</p>
+  <p style="font-size:13px;margin-top:8px">{{ bugun }} tarihi itibarıyla gecikmiş veya bu ay süresi dolacak beyanname yok.</p>
+</div>
+{% endif %}
+{% endblock %}
